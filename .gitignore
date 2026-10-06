@@ -1,0 +1,7 @@
+hotel
+hotel_asan
+*.dSYM/
+*.o
+*.log
+tests/out/
+.DS_Store
