@@ -1,10 +1,8 @@
-hotel
-hotel_asan
+hw1/hotel
+hw2/hotel_sem
+hw2/hotel_cond
+*/tests/out/
 *.dSYM/
 *.o
 *.log
-tests/out/
 .DS_Store
-hw2/hotel_sem
-hw2/hotel_cond
-hw2/tests/out/
