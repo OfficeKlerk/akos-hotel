@@ -1,5 +1,4 @@
-//общая часть модели гостиницы для двух программ:
-//hotel_sem (мьютекс + семафоры) и hotel_cond (мьютекс + условные переменные)
+//общая часть модели для hotel_sem и hotel_cond
 #ifndef HOTEL_H
 #define HOTEL_H
 
@@ -8,44 +7,41 @@
 //состояние клиента
 typedef enum
 {
-    C_REQUESTED, //подал запрос администратору
-    C_WAITING, //стоит в очереди
-    C_ASSIGNED, //номер назначен
-    C_REJECTED //получил отказ
+    C_REQUESTED,
+    C_WAITING,
+    C_ASSIGNED,
+    C_REJECTED
 } cstate_t;
 
-//клиент гостиницы, у каждого свой поток
+//клиент гостиницы
 typedef struct client
 {
     int id;
-    int stay; //заказанный срок в сутках
-    int days; //сколько суток прожито
-    int room; //номер комнаты или -1
+    int stay;
+    int days;
+    int room; //-1, если номера нет
     cstate_t state;
-    long enqueue_ms; //когда встал в очередь
-    struct client *next; //следующий в списке запросов или в очереди
-    void *sync; //примитив, на котором клиент ждет решения администратора
+    long enqueue_ms;
+    struct client *next;
+    void *sync; //семафор или условная переменная клиента
 } client_t;
 
-//общий мьютекс, под ним все состояние гостиницы и весь вывод
+//общий мьютекс для состояния гостиницы и вывода
 extern pthread_mutex_t mtx;
 
-//функции синхронизации, у каждой программы своя реализация (sync_sem.c, sync_cond.c)
-//все вызываются под mtx; функции ожидания отпускают mtx на время сна и захватывают обратно
+//синхронизация, реализована в sync_sem.c и sync_cond.c, вызывается под mtx
 void sync_init(void);
 void sync_client_init(client_t *c);
 void sync_client_free(client_t *c);
-void wait_client(client_t *c); //клиент ждет решения администратора
+void wait_client(client_t *c);
 void wake_client(client_t *c);
-void wait_admin(void); //администратор ждет работы
+void wait_admin(void);
 void wake_admin(void);
-void wait_main(void); //main ждет, пока клиенты покинут модель
+void wait_main(void);
 void wake_main(void);
 
-//название программы для вывода
 extern const char *sync_name;
 
-//запуск модели, вызывается из main каждой программы
 int hotel_run(int argc, char **argv);
 
 #endif
