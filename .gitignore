@@ -5,3 +5,6 @@ hotel_asan
 *.log
 tests/out/
 .DS_Store
+hw2/hotel_sem
+hw2/hotel_cond
+hw2/tests/out/
