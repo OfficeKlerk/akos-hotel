@@ -6,3 +6,7 @@ hw2/hotel_cond
 *.o
 *.log
 .DS_Store
+hw3/hotel_named
+hw3/hotel_unnamed
+hw3/hotel_admin
+hw3/hotel_client
